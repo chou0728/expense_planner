@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import './widgets/user_transactions.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,8 +23,20 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Flutter App'),
       ),
-      body: Center(
-        child: Text('Widget Playground!'),
+      body: Column(
+        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            width: double.infinity,
+            child: Card(
+              color: Colors.blue,
+              child: Text('tssdg'),
+              elevation: 5,
+            ),
+          ),
+          UserTransactions(),
+        ],
       ),
     );
   }
