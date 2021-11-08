@@ -25,6 +25,8 @@ class _NewTransactionState extends State<NewTransaction> {
     }
     
     widget.addTx(enteredTitle, enteredAmount);
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -39,12 +41,13 @@ class _NewTransactionState extends State<NewTransaction> {
               TextField(
                 decoration: InputDecoration(labelText: 'Title'),
                 controller: titleController,
+                onSubmitted: (_) => submitData(),
               ),
               TextField(
                 decoration: InputDecoration(labelText: 'Amount'),
                 controller: amountController,
                 keyboardType: TextInputType.number,
-                onSubmitted: (_) => submitData,
+                onSubmitted: (_) => submitData(),
               ),
               FlatButton(
                 onPressed: submitData,
