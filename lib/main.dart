@@ -53,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _startAddNewTransaction(BuildContext ctx) {
+    // flutter內建的function，會自動產生一個自下而上彈出的Modal，builder會return modal的內容
     showModalBottomSheet(
         context: ctx,
         builder: (bCtx) {
