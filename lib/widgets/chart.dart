@@ -22,7 +22,7 @@ class Chart extends StatelessWidget {
       }
 
       return {
-        'day': DateFormat.E().format(weekDay),
+        'day': DateFormat.E().format(weekDay).substring(0, 3),
         'amount': totalSum,
       };
     });
@@ -32,16 +32,13 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     print(groupedTranscationValues);
 
-
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
       child: Row(
-        children: [
-          Column(
-            children: [],
-          )
-        ],
+        children: groupedTranscationValues
+            .map((value) => Text('${value['day']}: ${value['amount']}'))
+            .toList(),
       ),
     );
   }
