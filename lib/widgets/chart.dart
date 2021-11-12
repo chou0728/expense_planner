@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../model/transaction.dart';
+import './chart_bar.dart';
 
 class Chart extends StatelessWidget {
   final List<Transaction> recentTransactions;
@@ -28,6 +29,11 @@ class Chart extends StatelessWidget {
     });
   }
 
+  double get totalSpending {
+    return groupedTranscationValues.fold(
+        0.0, (acc, cur) => acc + cur['amount']);
+  }
+
   @override
   Widget build(BuildContext context) {
     print(groupedTranscationValues);
@@ -35,10 +41,24 @@ class Chart extends StatelessWidget {
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
-      child: Row(
-        children: groupedTranscationValues
-            .map((value) => Text('${value['day']}: ${value['amount']}'))
-            .toList(),
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTranscationValues
+              .map(
+                (value) => Flexible(
+                  fit: FlexFit.tight, // 因為上層Row設了spaceAround，這邊再設定tight，這樣就不會超過每個數量平均下來的空間
+                  child: ChartBar(
+                      value['day'],
+                      value['amount'],
+                      totalSpending == 0.0
+                          ? 0.0
+                          : (value['amount'] as double) / totalSpending),
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
