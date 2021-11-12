@@ -26,7 +26,7 @@ class Chart extends StatelessWidget {
         'day': DateFormat.E().format(weekDay).substring(0, 3),
         'amount': totalSum,
       };
-    });
+    }).reversed.toList(); // 用reversed的話，會變成 ReversedListIterable 型態，所以還要用 toList 轉回List型態
   }
 
   double get totalSpending {
