@@ -26,7 +26,8 @@ class Chart extends StatelessWidget {
         'day': DateFormat.E().format(weekDay).substring(0, 3),
         'amount': totalSum,
       };
-    }).reversed.toList(); // 用reversed的話，會變成 ReversedListIterable 型態，所以還要用 toList 轉回List型態
+    }).reversed.toList();
+    // 用reversed的話，會變成 ReversedListIterable 型態，所以還要用 toList 轉回List型態
   }
 
   double get totalSpending {
@@ -48,7 +49,8 @@ class Chart extends StatelessWidget {
           children: groupedTranscationValues
               .map(
                 (value) => Flexible(
-                  fit: FlexFit.tight, // 因為上層Row設了spaceAround，這邊再設定tight，這樣就不會超過每個數量平均下來的空間
+                  // 因為上層Row設了spaceAround，這邊再設定tight，這樣就不會超過每個數量平均下來的空間
+                  fit: FlexFit.tight,
                   child: ChartBar(
                       value['day'],
                       value['amount'],
