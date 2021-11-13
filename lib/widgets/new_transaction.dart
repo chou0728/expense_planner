@@ -5,6 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../widgets/adaptive_flat_button.dart';
+import '../widgets/adaptive_raised_button.dart';
+
 class NewTransaction extends StatefulWidget {
   final Function addTx;
 
@@ -88,45 +91,11 @@ class _NewTransactionState extends State<NewTransaction> {
                               : 'Picked Date: ${DateFormat('yyyy/MM/dd').format(_selectedDate)}',
                         ),
                       ),
-                      Platform.isIOS
-                          ? CupertinoButton(
-                              onPressed: _presentDatePicker,
-                              child: Text(
-                                'Choose Date',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            )
-                          : FlatButton(
-                              onPressed: _presentDatePicker,
-                              child: Text(
-                                'Choose Date',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ))
+                      AdaptiveFlatButton('Choose Date', _presentDatePicker)
                     ],
                   ),
                 ),
-                Platform.isIOS
-                    ? CupertinoButton(
-                        onPressed: _submitData,
-                        color: Theme.of(context).primaryColor,
-                        child: Text(
-                          'Add Transaction',
-                        ),
-                      )
-                    : RaisedButton(
-                        onPressed: _submitData,
-                        color: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).textTheme.button.color,
-                        child: Text(
-                          'Add Transaction',
-                        ),
-                      )
+                AdaptiveRaisedButton('Add Transaction', _submitData)
               ],
             ),
           )),
