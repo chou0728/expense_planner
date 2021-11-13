@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../model/transaction.dart';
@@ -63,11 +65,21 @@ class TransactionList extends StatelessWidget {
                             color: Colors.grey,
                           ),
                         ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          color: Theme.of(context).errorColor,
-                          onPressed: () => _deleteTx(_transactions[index].id),
-                        ),
+                        /** 使用 MediaQuery.of(context).size.width 來判斷裝置的寬度 */
+                        trailing: MediaQuery.of(context).size.width > 360
+                            ? FlatButton.icon(
+                                icon: Icon(Icons.delete),
+                                label: Text('Delete'),
+                                textColor: Theme.of(context).errorColor,
+                                onPressed: () =>
+                                    _deleteTx(_transactions[index].id),
+                              )
+                            : IconButton(
+                                icon: Icon(Icons.delete),
+                                color: Theme.of(context).errorColor,
+                                onPressed: () =>
+                                    _deleteTx(_transactions[index].id),
+                              ),
                       ));
                 },
                 itemCount: _transactions.length,
