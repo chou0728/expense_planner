@@ -1,8 +1,10 @@
 // ignore_for_file: deprecated_member_use
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
+
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
       title: 'Expense Planner',
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        accentColor: Colors.amber,
+        accentColor: Colors.amber, // 強調色
         errorColor: Colors.red, // 預設是red
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
@@ -117,9 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     /** 很多地方都用到的話，將它的位置pointer指給一個變數，這樣可以提升性能 */
     final mediaQuery = MediaQuery.of(context);
-    final bool isLandscape =
-        mediaQuery.orientation == Orientation.landscape;
-        
+    final bool isLandscape = mediaQuery.orientation == Orientation.landscape;
+
     final appBar = AppBar(
       title: Text('Expense Planner'),
       actions: [
@@ -134,7 +135,8 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Show Chart'),
-        Switch(
+        Switch.adaptive(
+            activeColor: Theme.of(context).accentColor,
             value: _showChart,
             onChanged: (val) {
               setState(() {
@@ -193,9 +195,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => _startAddNewTransaction(context),
-        ));
+        floatingActionButton: Platform.isIOS
+            ? Container()
+            : FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => _startAddNewTransaction(context),
+              ));
   }
 }
