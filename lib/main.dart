@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
-import 'dart:io';
+import 'dart:io'; // 要使用Platform必須import
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
@@ -119,22 +120,43 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     /** 很多地方都用到的話，將它的位置pointer指給一個變數，這樣可以提升性能 */
     final mediaQuery = MediaQuery.of(context);
+
     final bool isLandscape = mediaQuery.orientation == Orientation.landscape;
 
-    final appBar = AppBar(
-      title: Text('Expense Planner'),
-      actions: [
-        IconButton(
-          onPressed: () => _startAddNewTransaction(context),
-          icon: Icon(Icons.add),
-        )
-      ],
-    );
+    /** 
+   * 沒有定義的話，dart會自動判斷型別為 Widget，並報錯說Widget沒有preferredSize這個getter
+   * 所以這邊要明確宣告為 PreferredSizeWidget
+   **/
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text('Expense Planner'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min, // children多寬就多寬，不會變成預設填滿全部
+              children: [
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => _startAddNewTransaction(context),
+                )
+              ],
+            ),
+          )
+        : AppBar(
+            title: Text('Expense Planner'),
+            actions: [
+              IconButton(
+                onPressed: () => _startAddNewTransaction(context),
+                icon: Icon(Icons.add),
+              )
+            ],
+          );
 
     final showChartSwitchWidget = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Show Chart'),
+        Text(
+          'Show Chart',
+          style: Theme.of(context).textTheme.headline6,
+        ),
         Switch.adaptive(
             activeColor: Theme.of(context).accentColor,
             value: _showChart,
@@ -169,37 +191,48 @@ class _MyHomePageState extends State<MyHomePage> {
       child: TransactionList(_userTransactions, _deleteTransaction),
     );
 
-    return Scaffold(
-        appBar: appBar,
-        body: SingleChildScrollView(
-          // Use SingleChildScrollView to avoid exceed error when keyboard show up
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // if 判斷式在這裡面不需要加上 {}，有點像是react中的 &&
-              if (isLandscape)
-                Column(
-                  children: [
-                    showChartSwitchWidget,
-                    _showChart ? chartWidgetLandScape : txListWidget,
-                  ],
-                ),
-              if (!isLandscape)
-                Column(
-                  children: [
-                    chartWidget,
-                    txListWidget,
-                  ],
-                )
-            ],
-          ),
+    final appBody = SafeArea(
+      child: SingleChildScrollView(
+        // Use SingleChildScrollView to avoid exceed error when keyboard show up
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // if 判斷式在這裡面不需要加上 {}，有點像是react中的 &&
+            if (isLandscape)
+              Column(
+                children: [
+                  showChartSwitchWidget,
+                  _showChart ? chartWidgetLandScape : txListWidget,
+                ],
+              ),
+            if (!isLandscape)
+              Column(
+                children: [
+                  chartWidget,
+                  txListWidget,
+                ],
+              )
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Platform.isIOS
-            ? Container()
-            : FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () => _startAddNewTransaction(context),
-              ));
+      ),
+    );
+
+    /** Scaffold 是 屬於material design風格的   */
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: appBody,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: appBody,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => _startAddNewTransaction(context),
+                  ));
   }
 }
