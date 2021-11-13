@@ -66,7 +66,7 @@ class TransactionList extends StatelessWidget {
                           ),
                         ),
                         /** 使用 MediaQuery.of(context).size.width 來判斷裝置的寬度 */
-                        trailing: MediaQuery.of(context).size.width > 360
+                        trailing: MediaQuery.of(context).size.width > 460
                             ? FlatButton.icon(
                                 icon: Icon(Icons.delete),
                                 label: Text('Delete'),
