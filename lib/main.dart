@@ -116,6 +116,27 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  List<Widget> _buildLandscapeContent(
+    Widget showChartSwitchWidget,
+    Widget chartWidgetLandScape,
+    Widget txListWidget,
+  ) {
+    return [
+      showChartSwitchWidget,
+      _showChart ? chartWidgetLandScape : txListWidget,
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(
+    Widget chartWidget,
+    Widget txListWidget,
+  ) {
+    return [
+      chartWidget,
+      txListWidget,
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     /** 很多地方都用到的話，將它的位置pointer指給一個變數，這樣可以提升性能 */
@@ -199,19 +220,16 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             // if 判斷式在這裡面不需要加上 {}，有點像是react中的 &&
             if (isLandscape)
-              Column(
-                children: [
-                  showChartSwitchWidget,
-                  _showChart ? chartWidgetLandScape : txListWidget,
-                ],
+              ..._buildLandscapeContent(
+                showChartSwitchWidget,
+                chartWidgetLandScape,
+                txListWidget,
               ),
             if (!isLandscape)
-              Column(
-                children: [
-                  chartWidget,
-                  txListWidget,
-                ],
-              )
+              ..._buildPortraitContent(
+                chartWidget,
+                txListWidget,
+              ),
           ],
         ),
       ),
