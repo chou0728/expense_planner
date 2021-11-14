@@ -7,11 +7,9 @@ import '../model/transaction.dart';
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
     Key key,
-    @required Transaction transaction,
-    @required Function deleteTx,
-  })  : transaction = transaction,
-        deleteTx = deleteTx,
-        super(key: key);
+    @required this.transaction,
+    @required this.deleteTx,
+  })  : super(key: key);
 
   final Transaction transaction;
   final Function deleteTx;
